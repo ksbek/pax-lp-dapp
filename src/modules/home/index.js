@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useMetaMask } from 'metamask-react';
 import { getBalance, getPrntrBalance, getAllowance, approveAmount, deposit, claim, web3, getDecimals } from '../shared/helper/contract';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Web3 from 'web3';
 
 export const Home = () => {
   const styles = useStyles();
@@ -34,6 +35,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (account) {
+      web3.eth.setProvider(Web3.givenProvider);
       getBalance(account).then(async (balance) => {
         const allowance = await getAllowance(account);
         const decimals = await getDecimals();
@@ -79,6 +81,7 @@ export const Home = () => {
       console.log(user);
       setLoading(false);
     }).catch((err) => {
+      console.log(err);
       setLoading(false);
     });
   };
@@ -89,6 +92,7 @@ export const Home = () => {
       setUser({...user, prntrBalance: +prntrBalance / 10 ** +decimals});
       setLoading(false);
     }).catch((err) => {
+      console.log(err);
       setLoading(false);
     });
   };
